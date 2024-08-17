@@ -20,6 +20,7 @@ WORKDIR /app
 
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/dist ./dist
+COPY --from=build /app/dist/router ./dist/router
 
 RUN apt-get update && npm install --omit=dev
 

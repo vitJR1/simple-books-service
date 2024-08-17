@@ -4,7 +4,7 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import http from 'http';
-import swaggerApi from '../src/router/swagger.json';
+import swaggerApi from './router/swagger.json';
 import { RegisterRoutes } from './router/routes';
 import { logger } from './core/logger';
 import { appConfig } from './core/config';

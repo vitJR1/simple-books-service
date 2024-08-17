@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "scripts": {
+    "build": "tsoa spec-and-routes && tsc",
     "local": "tsoa spec-and-routes && tsc && ts-node .",
-    "start": "tsoa spec-and-routes && tsc && ts-node ."
+    "start": "node dist/index.js"
   },
   "author": "LD5Coffee",
   "license": "ISC",
