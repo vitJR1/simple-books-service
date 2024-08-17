@@ -1,0 +1,22 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/**/*.controller.ts"],
+  "spec": {
+    "outputDirectory": "src/router",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "jwt": {
+        "type": "apiKey",
+        "name": "authorization",
+        "in": "header",
+        "description": "Token is not processed steal"
+      }
+    }
+  },
+  "routes": {
+    "iocModule": "./src/core/ioc.ts",
+    "routesDir": "src/router",
+    "authenticationModule": "./src/modules/auth/auth.ts"
+  }
+}

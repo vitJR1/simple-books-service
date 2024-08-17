@@ -1,0 +1,45 @@
+{
+  "name": "simple-books-service",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "local": "tsoa spec-and-routes && tsc && ts-node .",
+    "start": "tsoa spec-and-routes && tsc && ts-node ."
+  },
+  "author": "LD5Coffee",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/adapter-pg": "^5.18.0",
+    "@prisma/client": "^5.18.0",
+    "bcrypt": "^5.1.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.12.0",
+    "swagger-ui-express": "^5.0.1",
+    "tsoa": "^6.4.0",
+    "typedi": "^0.10.0",
+    "winston": "^3.14.2"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/swagger-ui-express": "^4.1.6",
+    "@types/winston": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0",
+    "prisma": "^5.18.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.1.3"
+  }
+}
