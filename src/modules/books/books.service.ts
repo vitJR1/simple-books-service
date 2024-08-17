@@ -2,59 +2,57 @@ import { Service } from 'typedi';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { BookObjectDto } from './dto/book-object.dto';
+import prisma from '../../core/db';
+import { StatusResponse } from '../utils/StatusResponse';
+import { HandingError } from '../utils/HandingError';
 
 @Service()
 export class BooksService {
+  private readonly defaultSelection = {
+    id: true,
+    author: true,
+    title: true,
+    genres: true,
+    publicationDate: true,
+  };
+
   async createBook(createBookDto: CreateBookDto): Promise<BookObjectDto> {
-    return {
-      id: 1,
-      title: createBookDto.title,
-      author: createBookDto.author,
-      publicationDate: new Date(createBookDto.publicationDate),
-      genres: createBookDto.genres,
-    };
+    return prisma.book.create({
+      data: createBookDto,
+      select: this.defaultSelection,
+    });
   }
   async updateBook(
     id: number,
     updateBookDto: UpdateBookDto,
   ): Promise<BookObjectDto> {
-    return {
-      id: 1,
-      title: 'title',
-      author: 'John Doe',
-      genres: ['comedy', 'horror'],
-      ...updateBookDto,
-      publicationDate: new Date(updateBookDto.publicationDate ?? new Date()),
-    };
+    return prisma.book.update({
+      data: updateBookDto,
+      select: this.defaultSelection,
+      where: { id },
+    });
   }
-  async deleteBook(id: number): Promise<'OK'> {
-    return 'OK';
+  async deleteBook(id: number): Promise<StatusResponse> {
+    return prisma.book.delete({ where: { id } }).then(() => ({
+      status: 'OK',
+    }));
   }
   async getBookList(): Promise<BookObjectDto[]> {
-    return [
-      {
-        id: 1,
-        title: 'title',
-        author: 'John Doe',
-        genres: ['comedy', 'horror'],
-        publicationDate: new Date(),
-      },
-      {
-        id: 2,
-        title: 'Harry Potter',
-        author: 'Kafka',
-        genres: ['comedy'],
-        publicationDate: new Date(),
-      },
-    ];
+    return await prisma.book.findMany({
+      select: this.defaultSelection,
+    });
   }
-  async getBookById(id: number): Promise<BookObjectDto> {
-    return {
-      id,
-      title: 'title',
-      author: 'John Doe',
-      genres: ['comedy', 'horror'],
-      publicationDate: new Date(),
-    };
+  async getBookById(id: number): Promise<BookObjectDto | void> {
+    return await prisma.book
+      .findFirstOrThrow({
+        where: {
+          id,
+        },
+        select: this.defaultSelection,
+      })
+      .then((result) => ({ ...result }))
+      .catch(() => {
+        throw new HandingError('User not found', 404);
+      });
   }
 }

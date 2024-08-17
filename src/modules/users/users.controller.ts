@@ -43,7 +43,9 @@ export class UsersController extends Controller {
 
   @Security('jwt')
   @Get('/me')
-  async me() {}
+  async me() {
+    return await this.usersService.getUserById(1);
+  }
 
   @Security('jwt', [Accesses.CHANGE_USER_ROLE])
   @Put('/:id/role')

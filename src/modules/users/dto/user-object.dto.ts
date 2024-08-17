@@ -3,5 +3,5 @@ export class UserObjectDto {
   username: string;
   email: string;
   emailApproved: boolean;
-  role: number;
+  role: string;
 }
