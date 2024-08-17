@@ -7,6 +7,7 @@ import http from 'http';
 import swaggerApi from '../src/router/swagger.json';
 import { RegisterRoutes } from './router/routes';
 import { logger } from './core/logger';
+import { appConfig } from './core/config';
 
 async function bootstrap() {
   const app = express();
@@ -23,8 +24,8 @@ async function bootstrap() {
 
   RegisterRoutes(app);
 
-  httpServer.listen(3000, () => {
-    logger.info('Server is running on http://localhost:3000');
+  httpServer.listen(appConfig.port, () => {
+    logger.info(`Server is running on http://localhost:${appConfig.port}`);
   });
 }
 

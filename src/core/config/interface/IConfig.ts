@@ -1,3 +1,4 @@
 export interface IConfig {
-	accessSecret: string
+  port: number;
+  accessSecret: string;
 }
