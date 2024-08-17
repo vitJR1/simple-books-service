@@ -9,19 +9,26 @@ Admin creds
 
 Database
 ```bash
-npx prisma generate --schema="src/core/db/prisma/schema.prisma"
-npx prisma migrate dev --schema="src/core/db/prisma/schema.prisma" --name init
+npx prisma generate
+npx prisma migrate dev
 
 ```
 
 Docker build 
 ```bash 
-docker build -t books-service .
+docker build --build-arg DATABASE_URL="postgres://postgres:root@192.168.84.104:5432/books-service" -t books-service .
 ```
 
 Docker start 
 ```bash
-docker run --env-file .env -p 3000:3000 --name books-service -d books-service
+docker run \
+  -e PORT=3000 \
+  -e ACCESS_SECRET=lkaonsdn21klf408ehfeqGOwrwqrasMTdf23geSS \
+  -e DATABASE_URL="postgres://postgres:root@192.168.84.104:5432/books-service" \
+  -p 3000:3000 \
+  --name books-service \
+  -d books-service
+
 ```
 
 .env
