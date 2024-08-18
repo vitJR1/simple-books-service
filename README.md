@@ -1,3 +1,11 @@
+DOCS: http://localhost:3000/docs/
+
+START: 
+Docker compose 
+```bash 
+docker compose up
+```
+
 Admin creds
 ```json
 {
@@ -17,23 +25,6 @@ npx prisma migrate dev
 Docker compose 
 ```bash 
 docker compose up
-```
-
-Docker build 
-```bash 
-docker build -t books-service .
-```
-
-Docker start 
-```bash
-docker run \
-  -e PORT=3000 \
-  -e ACCESS_SECRET=lkaonsdn21klf408ehfeqGOwrwqrasMTdf23geSS \
-  -e DATABASE_URL="postgres://postgres:root@192.168.84.104:5432/books-service" \
-  -p 3000:3000 \
-  --name books-service \
-  -d books-service
-
 ```
 
 .env
