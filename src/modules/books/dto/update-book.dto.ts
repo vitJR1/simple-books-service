@@ -13,8 +13,8 @@ export class UpdateBookDto {
   @IsOptional()
   publicationDate?: string;
 
-  @IsArray({ each: true })
-  @IsString()
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
   genres?: string[];
 }
