@@ -1,7 +1,8 @@
 import { type Request } from 'express';
-import jwt from 'jsonwebtoken';
-import { appConfig } from '../../core/config';
 import { logger } from '../../core/logger';
+import { AuthService } from './AuthService';
+import { Accesses } from './accesses/Accesses';
+import { HandingError } from '../utils/HandingError';
 
 export const expressAuthentication = async (
   req: Request,
@@ -16,35 +17,41 @@ export const expressAuthentication = async (
     const token = req.headers.authorization;
 
     if (token === undefined) {
-      throw Error('User is unauthorized');
+      throw new HandingError('User is unauthorized', 403);
     }
 
-    const payload = jwt.verify(token, appConfig.accessSecret);
+    const authService = new AuthService();
 
-    if (typeof payload === 'string') {
-      throw Error(payload);
-    }
+    const payload = authService.validateAccessToken(token);
 
     return await new Promise((resolve, reject) => {
-      const accesses = payload.accesses;
-      accesses.push(payload.type);
+      const accesses = payload.role;
 
-      let isEndpointAccessed = true;
-      if (scopes !== undefined && Array.isArray(scopes) && scopes.length > 0) {
-        isEndpointAccessed = scopes.some((e) => accesses.includes(e));
-      }
+      const allRequiredAccesses = scopes.reduce(
+        (a, b) => (parseInt(a, 2) | parseInt(b, 2)).toString(2),
+        Accesses.NONE,
+      );
+
+      const isEndpointAccessed =
+        (accesses & parseInt(allRequiredAccesses, 2)) ===
+        parseInt(allRequiredAccesses, 2);
+
+      logger.debug(
+        `user accesses: ${accesses.toString(2)}; required accessed: ${allRequiredAccesses}`,
+      );
 
       if (isEndpointAccessed) {
         resolve({
           id: Number(payload.id),
+          role: payload.role,
           token,
         });
       } else {
-        reject(new Error('Incorrect token received'));
+        reject(new HandingError('Forbidden', 403));
       }
     });
   } catch (e: any) {
     logger.warn(e.message);
-    throw Error(e);
+    throw e;
   }
 };

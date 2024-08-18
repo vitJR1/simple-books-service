@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "scripts": {
-    "local": "tsoa spec-and-routes && tsc && ts-node .",
-    "start": "tsoa spec-and-routes && tsc && ts-node ."
+    "build": "tsoa spec-and-routes && tsc",
+    "local": "tsoa spec-and-routes && prisma generate && tsc && ts-node .",
+    "start:migrate:prod": "prisma generate && prisma migrate deploy && node dist/index.js",
+    "prisma:generate": "prisma generate"
   },
   "author": "LD5Coffee",
   "license": "ISC",
@@ -19,6 +21,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "mailgun.js": "^10.2.3",
     "pg": "^8.12.0",
     "swagger-ui-express": "^5.0.1",
     "tsoa": "^6.4.0",

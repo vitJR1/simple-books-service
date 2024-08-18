@@ -9,12 +9,15 @@ import {
   Tags,
   Path,
   Get,
+  Middlewares,
 } from 'tsoa';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { Accesses } from '../auth/accesses/Accesses';
-import { BooksService } from './books.service';
 import { BookObjectDto } from './dto/book-object.dto';
+import { BooksService } from './books.service';
+import { StatusResponse } from '../utils/StatusResponse';
+import { bodyValidationPipe } from '../utils/bodyValidationPipe';
 
 @Service()
 @Tags('books')
@@ -22,26 +25,28 @@ import { BookObjectDto } from './dto/book-object.dto';
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
+  @Middlewares(bodyValidationPipe(CreateBookDto))
   @Security('jwt', [Accesses.CREATE])
-  @Post('/books')
+  @Post('')
   async createBook(
     @Body() createBookDto: CreateBookDto,
   ): Promise<BookObjectDto> {
     return await this.booksService.createBook(createBookDto);
   }
 
-  @Get('/books/')
+  @Get('/')
   async getBooksList(): Promise<BookObjectDto[]> {
     return await this.booksService.getBookList();
   }
 
-  @Get('/books/:id')
-  async getBookById(@Path() id: number): Promise<BookObjectDto> {
+  @Get('/:id')
+  async getBookById(@Path() id: number): Promise<BookObjectDto | void> {
     return await this.booksService.getBookById(id);
   }
 
+  @Middlewares(bodyValidationPipe(UpdateBookDto))
   @Security('jwt', [Accesses.UPDATE])
-  @Put('/books/:id')
+  @Put('/:id')
   async updateBook(
     @Path() id: number,
     @Body() updateBookDto: UpdateBookDto,
@@ -50,8 +55,8 @@ export class BooksController {
   }
 
   @Security('jwt', [Accesses.DELETE])
-  @Delete('/books/:id')
-  async deleteBook(@Path() id: number): Promise<'OK'> {
+  @Delete('/:id')
+  async deleteBook(@Path() id: number): Promise<StatusResponse> {
     return await this.booksService.deleteBook(id);
   }
 }

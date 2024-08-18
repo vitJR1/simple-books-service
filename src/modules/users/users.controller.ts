@@ -19,6 +19,7 @@ import { LoginResponseDto } from './dto/login-response.dto';
 import { UserObjectDto } from './dto/user-object.dto';
 import { Accesses } from '../auth/accesses/Accesses';
 import { bodyValidationPipe } from '../utils/bodyValidationPipe';
+import { StatusResponse } from '../utils/StatusResponse';
 
 @Service()
 @Tags('users')
@@ -41,9 +42,17 @@ export class UsersController extends Controller {
     return await this.usersService.login(loginUserDto);
   }
 
+  @Get('/email-approve/:key')
+  async emailApprove(@Path() key: string): Promise<StatusResponse> {
+    await this.usersService.emailApprove(key);
+    return { status: 'Email approved' };
+  }
+
   @Security('jwt')
   @Get('/me')
-  async me() {}
+  async me() {
+    return await this.usersService.getUserById(1);
+  }
 
   @Security('jwt', [Accesses.CHANGE_USER_ROLE])
   @Put('/:id/role')
