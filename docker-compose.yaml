@@ -7,7 +7,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
       POSTGRES_PORT: 5432
-      POSTGRES_DB: books-service
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres -d books-service" ]
       interval: 30s

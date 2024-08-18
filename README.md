@@ -16,7 +16,7 @@ npx prisma migrate dev
 
 Docker build 
 ```bash 
-docker build --build-arg DATABASE_URL="postgres://postgres:root@192.168.84.104:5432/books-service" -t books-service .
+docker build -t books-service .
 ```
 
 Docker start 
