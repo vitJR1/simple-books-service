@@ -10,6 +10,7 @@ import {
   Route,
   Security,
   Tags,
+  Request,
 } from 'tsoa';
 import { UsersService } from './users.service';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
@@ -50,8 +51,8 @@ export class UsersController extends Controller {
 
   @Security('jwt')
   @Get('/me')
-  async me() {
-    return await this.usersService.getUserById(1);
+  async me(@Request() req: any) {
+    return await this.usersService.getUserById(req.user.id);
   }
 
   @Security('jwt', [Accesses.CHANGE_USER_ROLE])
