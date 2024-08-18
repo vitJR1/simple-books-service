@@ -27,6 +27,7 @@ services:
     container_name: sbs-app
     environment:
       PORT: 3000
+      HOST: localhost:3000
       ACCESS_SECRET: lkaonsdn21klf408ehfeqGOwrwqrtasMTdf23geSS
       DATABASE_URL: "postgres://postgres:root@postgres/books-service"
     ports:

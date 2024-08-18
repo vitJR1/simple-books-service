@@ -1,4 +1,4 @@
-import { IsArray, IsDate, IsString, MinLength } from 'class-validator';
+import { IsArray, IsDateString, IsString, MinLength } from 'class-validator';
 
 export class CreateBookDto {
   @IsString()
@@ -9,10 +9,10 @@ export class CreateBookDto {
   @MinLength(1)
   author: string;
 
-  @IsDate()
+  @IsDateString()
   publicationDate: string;
 
-  @IsArray({ each: true })
-  @IsString()
+  @IsArray()
+  @IsString({ each: true })
   genres: string[];
 }

@@ -9,6 +9,7 @@ import {
   Tags,
   Path,
   Get,
+  Middlewares,
 } from 'tsoa';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
@@ -16,6 +17,7 @@ import { Accesses } from '../auth/accesses/Accesses';
 import { BookObjectDto } from './dto/book-object.dto';
 import { BooksService } from './books.service';
 import { StatusResponse } from '../utils/StatusResponse';
+import { bodyValidationPipe } from '../utils/bodyValidationPipe';
 
 @Service()
 @Tags('books')
@@ -23,6 +25,7 @@ import { StatusResponse } from '../utils/StatusResponse';
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
+  @Middlewares(bodyValidationPipe(CreateBookDto))
   @Security('jwt', [Accesses.CREATE])
   @Post('')
   async createBook(
@@ -41,6 +44,7 @@ export class BooksController {
     return await this.booksService.getBookById(id);
   }
 
+  @Middlewares(bodyValidationPipe(UpdateBookDto))
   @Security('jwt', [Accesses.UPDATE])
   @Put('/:id')
   async updateBook(

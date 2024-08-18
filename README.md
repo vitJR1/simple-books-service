@@ -7,6 +7,13 @@ Admin creds
 }
 ```
 
+How to start:
+```
+npx prisma generate
+npx prisma migrate dev
+docker compose up
+```
+
 Database
 ```bash
 npx prisma generate
