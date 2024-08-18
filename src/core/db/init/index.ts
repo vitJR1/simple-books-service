@@ -9,11 +9,14 @@ export async function initDb() {
 
     const user = await prisma.user.findFirst();
     if (user === null) {
-      const createdUser = await userService.register({
-        username: 'admin',
-        email: 'admin@example.com',
-        password: 'Adm1nistr@toR',
-      });
+      const createdUser = await userService.register(
+        {
+          username: 'admin',
+          email: 'admin@example.com',
+          password: 'Adm1nistr@toR',
+        },
+        false,
+      );
       await userService.updateUserRole(createdUser.id, {
         role: Accesses.FULL,
       });

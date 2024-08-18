@@ -1,5 +1,7 @@
 import Mailgun from 'mailgun.js';
+import formData from 'form-data';
 import { appConfig } from '../../config';
+import { logger } from '../../logger';
 
 export class EmailService {
   private static instance: EmailService;
@@ -7,7 +9,7 @@ export class EmailService {
   private client: any;
 
   private constructor() {
-    this.mailgun = new Mailgun(null);
+    this.mailgun = new Mailgun(formData);
     this.client = this.mailgun.client({
       username: 'api',
       key: appConfig.mailgunApiKey,
@@ -15,24 +17,37 @@ export class EmailService {
   }
 
   static getInstance() {
+    if (!this.checkRequiredEnv()) {
+      throw Error('Email service disabled');
+    }
     if (!this.instance) {
       this.instance = new EmailService();
     }
     return this.instance;
   }
 
-  send(email: string) {
-    this.client.messages
-      .create('sandbox53e866823071468789ca9bd7bab0fff1.mailgun.org', {
-        from: 'Mailgun Sandbox <postmaster@sandbox53e866823071468789ca9bd7bab0fff1.mailgun.org>',
+  private static checkRequiredEnv(): boolean {
+    return (
+      appConfig.mailgunApiKey !== undefined &&
+      appConfig.mailgunDomain !== undefined
+    );
+  }
+
+  async send(
+    email: string,
+    template: string,
+    vars: Record<string, string>,
+  ): Promise<void> {
+    await this.client.messages
+      .create(appConfig.mailgunDomain, {
+        from: `no-reply<${appConfig.mailgunDomain}>`,
         to: [email],
-        subject: 'Подтвердите почту',
-        template: 'email approve',
-        't:variables': {
-          url: 'test',
-        },
+        template: template,
+        't:variables': vars,
       })
-      .then((msg) => console.log(msg))
-      .catch((err) => console.log(err));
+      .then((msg) => {
+        logger.info('Email sent', { msg, template, vars });
+      })
+      .catch((err) => logger.error(err));
   }
 }

@@ -1,3 +1,3 @@
 export interface StatusResponse {
-  status: 'OK';
+  status: string;
 }
